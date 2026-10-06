@@ -1,0 +1,38 @@
+name: ingest
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"   # UTC; minute 17 avoids the busy top-of-hour queue. IST = UTC+5:30
+  workflow_dispatch:
+    inputs:
+      past_days:
+        description: "Days to fetch (use 30 once to backfill; max 92)"
+        default: "2"
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m src.pipeline --past-days "${{ inputs.past_days || '2' }}"
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Keep failed batch for debugging
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-batch
+          path: out/*.csv
+          retention-days: 7

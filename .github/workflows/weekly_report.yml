@@ -1,0 +1,39 @@
+name: weekly_report
+
+on:
+  schedule:
+    - cron: "30 2 * * 1"   # Monday 02:30 UTC = 08:00 IST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write           # lets the keep-alive step re-enable the schedules
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m src.weekly_report
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          LLM_API_URL: ${{ secrets.LLM_API_URL }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+      # GitHub pauses scheduled workflows in public repos after 60 days without repo activity.
+      # Best effort: re-enabling via the API each week. A tiny commit also resets the timer.
+      - name: Keep schedules alive
+        if: always()
+        run: |
+          gh workflow enable ingest.yml || true
+          gh workflow enable weekly_report.yml || true
+        env:
+          GH_TOKEN: ${{ github.token }}
