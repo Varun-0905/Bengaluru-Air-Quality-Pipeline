@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 import os
-
+from . import config  # noqa: F401  (importing config loads the .env file)
 import requests
 
 log = logging.getLogger(__name__)
