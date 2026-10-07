@@ -3,7 +3,7 @@
 An automated, end-to-end data pipeline: scheduled ingestion, six data-quality checks, PostgreSQL storage
 (raw / clean / ops layers), a live Streamlit dashboard and a weekly insight alert. Runs on free tiers only.
 
-**Live dashboard:** _add link_  |  **Data:** [Open-Meteo](https://open-meteo.com) air-quality and weather APIs
+**Live dashboard:** [_add link_](https://bengaluru-air-quality-pipeline-hk6dva7fumaucxvy5uud7n.streamlit.app/)  |  **Data:** [Open-Meteo](https://open-meteo.com) air-quality and weather APIs
 
 ## Architecture
 
@@ -41,6 +41,9 @@ streamlit run dashboard/app.py                         # needs: pip install -r d
 1. Push to a **public** GitHub repo. Add secrets: `DATABASE_URL`, optionally `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, and for the optional LLM wording `LLM_API_URL`, `LLM_API_KEY`, `LLM_MODEL`.
 2. Actions tab: run **ingest** manually with `past_days = 30` once, then it runs every 6 hours. **weekly_report** runs Mondays 08:00 IST.
 3. Streamlit Community Cloud: new app, main file `dashboard/app.py`, Python 3.11, add `DATABASE_URL` under Secrets.
+4. My deployed version : https://bengaluru-air-quality-pipeline-hk6dva7fumaucxvy5uud7n.streamlit.app/
+
+
 
 ## Limitations (read before quoting results)
 
