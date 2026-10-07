@@ -3,7 +3,7 @@
 An automated, end-to-end data pipeline: scheduled ingestion, six data-quality checks, PostgreSQL storage
 (raw / clean / ops layers), a live Streamlit dashboard and a weekly insight alert. Runs on free tiers only.
 
-**Live dashboard:** [_add link_](https://bengaluru-air-quality-pipeline-hk6dva7fumaucxvy5uud7n.streamlit.app/)  |  **Data:** [Open-Meteo](https://open-meteo.com) air-quality and weather APIs
+**Live dashboard:** [_bengaluru-air-quality-pipeline_](https://bengaluru-air-quality-pipeline-hk6dva7fumaucxvy5uud7n.streamlit.app/)  |  **Data:** [Open-Meteo](https://open-meteo.com) air-quality and weather APIs
 
 ## Architecture
 
